@@ -1,51 +1,83 @@
-//User selection
-    // input text. rock, paper or scissor
-// Computer's choice.
-    // should be random
-    //Math.random() * 3
-// Match those. Result - Draw, W or L
-    // rock > scissors. Paper > rock . scissors > paper
-// Ask if user wants to exit or continue.
-// 
+const rspList = ["Rock","Paper","Scissors"];
+let restartGameBool = false;
 
-//No loops introduced rn
-function getUserChoice(){
-    let userChoice = prompt("Enter your choice: \n1 for rock\n2 for paper \n3 for scissors \ne to exit the game","");
-    return userChoice;
+
+function computerChoice(){
+    let choice = Math.floor(Math.random()*3);
+    return rspList[choice];
 }
-function validateUserChoice(userChoice){
-    if(userChoice == "e"){
-        console.log("You exited the game. Have a good day!");
-        return -1;
+function displayUserChoice(string){
+    userChoiceDisplay.textContent = string;
+}
+function displayComputerChoice(choice){
+    computerChoiceDisplay.textContent = choice;
+
+}
+function gameResult(userChoice,computerChoice){
+    if(userChoice == computerChoice){
+        gameInstructions.textContent = "This round was a tie";
     }
-    else if(userChoice != "1" && userChoice != "2" && userChoice != "3"){
-        console.log(`${userChoice} is an invalid choice`);
-        return -1;
+    else if((userChoice == "Rock" & computerChoice == "Scissors") | (userChoice == "Paper" & computerChoice =="Rock")| (userChoice == "Scissors" & computerChoice =="Paper")){
+               gameInstructions.textContent = "User won this round!"
+        let updatedUserWins = +userWinsDisplay.textContent.split(" ")[1] + 1;
+        userWinsDisplay.textContent = "WINS: "+ updatedUserWins;
+        if (updatedUserWins == 5){
+            restartGameBool = true;
+            gameInstructions.textContent = "User won the round of 5! Please restart the game."
+        }
+        else{
+            gameInstructions.textContent = "User won this round!"
+        }
+    }else{
+        let updatedComputerWins = +computerWinsDisplay.textContent.split(" ")[1] + 1
+        computerWinsDisplay.textContent = "WINS: "+ updatedComputerWins
+        if (updatedComputerWins == 5){
+            restartGameBool = true;
+            gameInstructions.textContent = "Computer won the round of 5! Please restart the game"
+        }
+        else{
+            gameInstructions.textContent = "Computer won this round!"
+        }
     }
-    return +userChoice - 1;
+
 }
 
-function getComputerChoice(){
-    let computerChoice = Math.floor(Math.random()*3);
-    return computerChoice
+function createRestartButton(){
+    const restartButton = document.createElement("button");
+    restartButton.textContent = "RESTART"
+    restartButton.classList.add("restart-button");
+    gameInstructions.parentNode.appendChild(restartButton);
 }
 
-function matchChoices(userChoice,computerChoice,arr){
-    if((userChoice===computerChoice)){
-        console.log(`Draw! You both chose ${arr[userChoice]}`)
-    }
-    else if( (userChoice == 0 && computerChoice == 2 ) || (userChoice == 1 && computerChoice == 0 ) || (userChoice == 2 && computerChoice == 1 )){
-        console.log(`You win! You drew ${arr[userChoice]} and computer chose ${arr[computerChoice]}`);
-    }
-    else{
-        console.log(`You lose! You drew ${arr[userChoice]} and computer chose ${arr[computerChoice]}`);
-    }
-}
+const gameInstructions = document.querySelector(".game-instructions");
+const computerWinsDisplay = document.querySelector(".computer-win-counter")
+const userWinsDisplay = document.querySelector(".user-win-counter")
+const computerChoiceDisplay = document.querySelector(".computer-choice")
+const gameButtonContainer = document.querySelector(".game-button-container")
+const userChoiceDisplay = document.querySelector(".user-choice")
 
-let userChoice = getUserChoice();
-let validUserChoice = validateUserChoice(userChoice); //Validating only once.
-if(validUserChoice != -1){
-    let computerChoice = getComputerChoice();
-    let arr = ["rock","paper","scissors"];
-    matchChoices(validUserChoice,computerChoice,arr);
+gameButtonContainer.addEventListener("click",(event)=>{
+        if (event.target.tagName === "BUTTON" & restartGameBool == false){
+                let userGameChoice = event.target.textContent
+                displayUserChoice(userGameChoice);
+                let computerGameChoice = computerChoice()
+                displayComputerChoice(computerGameChoice)
+                gameResult(userGameChoice,computerGameChoice)
+                if(restartGameBool){
+                    createRestartButton();
+                }
+        }
+    }
+)
+gameInstructions.parentNode.addEventListener("click",(event)=>{
+    if(event.target.tagName == "BUTTON"){
+        displayUserChoice("");
+        displayComputerChoice("");
+        userWinsDisplay.textContent ="WINS: 0";
+        computerWinsDisplay.textContent ="WINS: 0";
+        gameInstructions.textContent = "Start the game";
+        restartGameBool = false;
+        event.target.remove();
+    }
 }
+)
