@@ -1,0 +1,41 @@
+body{
+    margin:0;
+    flex-grow:1;
+    height:150vh;
+}
+
+.body{
+    background-color:black;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    column-gap: 100px;
+    align-items:center;
+    height:100%;
+    flex-grow:1;
+    gap:100px;
+    width:100%;
+}
+.interface{
+    background-color:black;
+    color:white;
+    display:flex;
+    flex:1;
+    flex-direction:row;
+    gap:150px;
+    padding:50px;
+    justify-content:space-around;;
+    align-items:center;
+    border:solid;
+    border-width:5px;
+    border-radius:7.5px;
+}
+.user-interface button, .game-instructions-container button{
+    background-color:black;
+    color:white;
+    border:solid;
+    border-width:2px;
+    border-color:white;
+    padding:5px 10px 5px 10px;
+}
